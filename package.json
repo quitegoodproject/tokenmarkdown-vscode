@@ -1,0 +1,115 @@
+{
+  "name": "tokenmarkdown-vscode",
+  "displayName": "TokenMarkdown: Web Docs to Clean Context",
+  "description": "Sub-150ms Web-to-AST Markdown extractor for Cursor and VS Code. Strips 90%+ DOM bloat from documentation URLs before LLM context injection.",
+  "version": "0.1.0",
+  "publisher": "quitegoodproject",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "llm",
+    "cursor",
+    "ai-agent",
+    "token-optimization",
+    "web-scraper",
+    "documentation"
+  ],
+  "license": "MIT",
+  "homepage": "https://tokenmarkdown.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quitegoodproject/tokenmarkdown-vscode.git"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCommand:tokenmarkdown.fetchCleanDocs",
+    "onCommand:tokenmarkdown.setApiKey"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "tokenmarkdown.fetchCleanDocs",
+        "title": "TokenMarkdown: Fetch Clean Docs from URL",
+        "category": "TokenMarkdown",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "tokenmarkdown.setApiKey",
+        "title": "TokenMarkdown: Set API Key",
+        "category": "TokenMarkdown"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "tokenmarkdown.fetchCleanDocs",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m"
+      }
+    ],
+    "configuration": {
+      "title": "TokenMarkdown",
+      "properties": {
+        "tokenmarkdown.developerEmail": {
+          "type": "string",
+          "default": "",
+          "description": "Your work email. Automatically unlocks 100 free documentation extractions without a credit card."
+        },
+        "tokenmarkdown.mode": {
+          "type": "string",
+          "enum": [
+            "article",
+            "full",
+            "raw"
+          ],
+          "enumDescriptions": [
+            "Filters headers, footers, and nav links to retain core content (~90-95% token reduction)",
+            "Retains layout and section hierarchy while stripping scripts, cookies, and ads",
+            "Retains sanitized semantic HTML tags without markdown conversion"
+          ],
+          "default": "article",
+          "description": "Extraction compression mode to balance token savings vs navigation context."
+        },
+        "tokenmarkdown.insertMode": {
+          "type": "string",
+          "enum": [
+            "insertAtCursor",
+            "openNewDocument",
+            "copyToClipboard"
+          ],
+          "enumDescriptions": [
+            "Insert extracted markdown directly at the current editor cursor position",
+            "Open the extracted markdown in a new editor tab",
+            "Copy extracted markdown to system clipboard (ideal for pasting into Cursor Composer / Claude)"
+          ],
+          "default": "insertAtCursor",
+          "description": "Where to place the extracted clean Markdown."
+        },
+        "tokenmarkdown.cacheOffline": {
+          "type": "boolean",
+          "default": true,
+          "description": "Cache fetched documentation locally in extension storage for instant 0ms offline access."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --no-dependencies"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.6.3"
+  }
+}
